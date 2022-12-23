@@ -67,9 +67,6 @@ return require('packer').startup(function(use)
             {"onsails/lspkind-nvim"},
             {'j-hui/fidget.nvim'},
 
-            -- Useful status updates for LSP
-            'j-hui/fidget.nvim',
-
             -- Snippets
             {'L3MON4D3/LuaSnip'},
             {'rafamadriz/friendly-snippets'},
