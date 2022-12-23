@@ -74,6 +74,8 @@ tabnine:setup({
 	snippet_placeholder = "..",
 })
 
+-- Turn on lsp status information
+require('fidget').setup()
 local cmp = require('cmp')
 local lspkind = require("lspkind")
 
