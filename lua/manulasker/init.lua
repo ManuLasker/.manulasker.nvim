@@ -1,5 +1,6 @@
 require("manulasker.set")
 require("manulasker.remap")
+require("manulasker.packer")
 
 local augroup = vim.api.nvim_create_augroup
 local ManuLaskerGroup = augroup('ManuLasker', {})
