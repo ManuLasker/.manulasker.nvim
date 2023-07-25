@@ -6,23 +6,12 @@ vim.cmd.packadd('packer.nvim')
 return require('packer').startup(function(use)
     -- core
     use 'wbthomason/packer.nvim'
-    use 'nvim-lua/plenary.nvim'
 
     -- telescope
     use {
         'nvim-telescope/telescope.nvim', tag = '0.1.0',
         -- or                            , branch = '0.1.x',
         requires = { {'nvim-lua/plenary.nvim'} }
-    }
-
-    -- treesitter
-    use("nvim-treesitter/nvim-treesitter", {
-        run = ":TSUpdate"
-    })
-    use("nvim-treesitter/playground")
-    use { -- Additional text objects via treesitter
-        'nvim-treesitter/nvim-treesitter-textobjects',
-        after = 'nvim-treesitter',
     }
 
     -- appearance
@@ -33,6 +22,29 @@ return require('packer').startup(function(use)
             vim.cmd('colorscheme rose-pine')
         end
     })
+
+    use({
+        "folke/trouble.nvim",
+        config = function()
+            require("trouble").setup {
+                icons = false,
+                -- your configuration comes here
+                -- or leave it empty to use the default settings
+                -- refer to the configuration section below
+            }
+        end
+    })
+
+    -- treesitter
+    use("nvim-treesitter/nvim-treesitter", {
+        run = function()
+            local ts_update = require('nvim-treesitter.install').update({ with_sync = true })
+            ts_update()
+        end
+    })
+    use("nvim-treesitter/playground")
+    -- use("theprimeagen/refactoring.nvim")
+    use("nvim-treesitter/nvim-treesitter-context");
 
     -- fancy status line
     use 'nvim-lualine/lualine.nvim'
@@ -63,9 +75,6 @@ return require('packer').startup(function(use)
                 {'saadparwaiz1/cmp_luasnip'},
                 {'hrsh7th/cmp-nvim-lsp'},
                 {'hrsh7th/cmp-nvim-lua'},
-                {"tzachar/cmp-tabnine", { run = "./install.sh" }},
-                {"onsails/lspkind-nvim"},
-                {'j-hui/fidget.nvim'},
 
                 -- Snippets
                 {'L3MON4D3/LuaSnip'},
@@ -75,5 +84,6 @@ return require('packer').startup(function(use)
 
     -- learn vim
     use("ThePrimeagen/vim-be-good")
-
+    -- copilot
+    use("github/copilot.vim")
 end)
