@@ -19,7 +19,7 @@ lsp.configure('yamlls', {
             schemas = {
                 ["https://json.schemastore.org/github-workflow.json"] = "/.github/workflows/*",
                 ["https://s3.amazonaws.com/cfn-resource-specifications-us-east-1-prod/schemas/2.15.0/all-spec.json"] = "*template*.yaml",
-                ["https://raw.githubusercontent.com/awslabs/goformation/master/schema/cloudformation.schema.json"] = "*template*.yaml",
+                --["https://raw.githubusercontent.com/awslabs/goformation/master/schema/cloudformation.schema.json"] = "*template*.yaml",
                 ["https://raw.githubusercontent.com/microsoft/azure-pipelines-vscode/master/service-schema.json"] = "*azure*.yaml"
             },
             customTags = {
