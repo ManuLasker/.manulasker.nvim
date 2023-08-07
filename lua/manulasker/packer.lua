@@ -82,6 +82,9 @@ return require('packer').startup(function(use)
             }
     }
 
+    -- markdown
+    use { "iamcco/markdown-preview.nvim", build = "cd app && yarn install" }
+
     -- learn vim
     use("ThePrimeagen/vim-be-good")
     -- copilot
