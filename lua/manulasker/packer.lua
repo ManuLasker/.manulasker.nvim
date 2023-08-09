@@ -23,6 +23,7 @@ return require('packer').startup(function(use)
         end
     })
 
+
     use({
         "folke/trouble.nvim",
         config = function()

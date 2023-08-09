@@ -10,6 +10,8 @@ vim.keymap.set("n", "<C-u>", "<C-u>zz")
 vim.keymap.set("n", "n", "nzzzv")
 vim.keymap.set("n", "N", "Nzzzv")
 
+vim.keymap.set({'n', 'v'}, "<C-b>", "<C-a>")
+vim.keymap.set({'n', 'v'}, "g<C-b>", "g<C-a>")
 
 vim.keymap.set("n", "<leader>vbg", function()
     require("vim-be-good")
