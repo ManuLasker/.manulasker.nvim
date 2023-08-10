@@ -1,12 +1,9 @@
 require('rose-pine').setup({
 	--- @usage 'auto'|'main'|'moon'|'dawn'
-	variant = 'auto',
+	variant = 'moon',
 	--- @usage 'main'|'moon'|'dawn'
 	dark_variant = 'moon',
-	bold_vert_split = false,
-	dim_nc_background = false,
 	disable_background = true,
-	disable_float_background = false,
 	disable_italics = false,
 
 	--- @usage string hex value or named color from rosepinetheme.com/palette
@@ -40,11 +37,11 @@ require('rose-pine').setup({
 	-- Change specific vim highlight groups
 	-- https://github.com/rose-pine/neovim/wiki/Recipes
 	highlight_groups = {
-		ColorColumn = { bg = 'rose' },
+		ColorColumn = { bg = 'rose', blend = 40 },
 
 		-- Blend colours against the "base" background
-		CursorLine = { bg = 'foam', blend = 10 },
-		StatusLine = { fg = 'love', bg = 'love', blend = 10 },
+		CursorLine = { bg = 'foam', blend = 5 },
+		StatusLine = { fg = 'love', bg = 'love', blend = 5 },
 
 		-- By default each group adds to the existing config.
 		-- If you only want to set what is written in this config exactly,
@@ -57,8 +54,8 @@ function ColorMyPencils(color)
 	color = color or "rose-pine"
 	vim.cmd.colorscheme(color)
 
-    -- vim.api.nvim_set_hl(0, "Normal", { bg = "none" })
-	-- vim.api.nvim_set_hl(0, "NormalFloat", { bg = "none" })
+    vim.api.nvim_set_hl(0, "Normal", { bg = "none" })
+	vim.api.nvim_set_hl(0, "NormalFloat", { bg = "none" })
 end
 
 ColorMyPencils()
