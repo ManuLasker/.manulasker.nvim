@@ -23,6 +23,15 @@ return require('packer').startup(function(use)
         end
     })
 
+    -- debugger
+    use{
+        'mfussenegger/nvim-dap',
+        requires = {
+            { "rcarriga/nvim-dap-ui", requires = {"mfussenegger/nvim-dap"} },
+            'williamboman/mason.nvim',
+            'jay-babu/mason-nvim-dap.nvim'
+        }
+    }
 
     use({
         "folke/trouble.nvim",
