@@ -74,10 +74,7 @@ dap.configurations.cpp = {
 
 dap.configurations.c = dap.configurations.cpp
 
-vim.fn.sign_define('DapBreakpoint', {text='🛑', texthl='', linehl='', numhl=''})
-
 -- Basic debugging keymaps, feel free to change to your liking!
-
 vim.keymap.set('n', '<F5>', function() dap.continue() end, { desc = 'Debug: Start/Continue' })
 vim.keymap.set('n', '<F10>', function() dap.step_over() end, { desc = 'Debug: Step Over' })
 vim.keymap.set('n', '<F11>', function() dap.step_into() end, { desc = 'Debug: Step Into' })
