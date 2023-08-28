@@ -25,13 +25,20 @@ return require('packer').startup(function(use)
 
 
     -- debugger
-    use{ 'mfussenegger/nvim-dap' }
+    use{
+        'mfussenegger/nvim-dap',
+        requires = {
+            { "rcarriga/nvim-dap-ui", requires = {"mfussenegger/nvim-dap"} },
+            'williamboman/mason.nvim',
+            'jay-babu/mason-nvim-dap.nvim'
+        }
+    }
 
     use({
         "folke/trouble.nvim",
         config = function()
             require("trouble").setup {
-                icons = true,
+                icons = false,
                 -- your configuration comes here
                 -- or leave it empty to use the default settings
                 -- refer to the configuration section below
