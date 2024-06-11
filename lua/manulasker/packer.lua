@@ -9,20 +9,19 @@ return require('packer').startup(function(use)
 
     -- telescope
     use {
-        'nvim-telescope/telescope.nvim', tag = '0.1.0',
+        'nvim-telescope/telescope.nvim', -- tag = '0.1.4',
         -- or                            , branch = '0.1.x',
         requires = { {'nvim-lua/plenary.nvim'} }
     }
 
     -- appearance
     use({
-        "rebelot/kanagawa.nvim",
-        as = 'kanagawa',
+        'rose-pine/neovim',
+        as = 'rose-pine',
         config = function()
-            vim.cmd('colorscheme kanagawa')
+            vim.cmd('colorscheme rose-pine')
         end
     })
-
 
     -- debugger
     use{
