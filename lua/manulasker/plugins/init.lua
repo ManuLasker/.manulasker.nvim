@@ -8,5 +8,6 @@
 
 return {
     { import = "manulasker.plugins.ui" },
-    { import = "manulasker.plugins.editor" }
+    { import = "manulasker.plugins.editor" },
+    { import = "manulasker.plugins.lsp" },
 }
