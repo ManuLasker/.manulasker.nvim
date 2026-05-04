@@ -9,12 +9,17 @@ return {
     "zbirenbaum/copilot.lua",
     "Davidyz/VectorCode",
     "cairijun/codecompanion-agentskills.nvim",
+    "ravitemer/codecompanion-history.nvim"
   },
   keys = {
-    { "<leader>ac", "<cmd>CodeCompanionChat Toggle<cr>", mode = { "n", "v" }, desc = "AI: Toggle chat" },
-    { "<leader>aa", "<cmd>CodeCompanionChat<cr>",        mode = { "n", "v" }, desc = "AI: New chat" },
-    { "<leader>ai", "<cmd>CodeCompanion<cr>",            mode = { "n", "v" }, desc = "AI: Inline" },
-    { "<leader>ap", "<cmd>CodeCompanionActions<cr>",     mode = { "n", "v" }, desc = "AI: Actions" },
+    { "<leader>ac", "<cmd>CodeCompanionChat Toggle<cr>",   mode = "n", desc = "AI: Toggle chat" },
+    { "<leader>ac", ":'<,'>CodeCompanionChat Toggle<cr>",  mode = "v", desc = "AI: Toggle chat" },
+    { "<leader>aa", "<cmd>CodeCompanionChat<cr>",          mode = "n", desc = "AI: New chat" },
+    { "<leader>aa", ":'<,'>CodeCompanionChat<cr>",         mode = "v", desc = "AI: New chat" },
+    { "<leader>ai", "<cmd>CodeCompanion<cr>",              mode = "n", desc = "AI: Inline" },
+    { "<leader>ai", ":'<,'>CodeCompanion<cr>",             mode = "v", desc = "AI: Inline" },
+    { "<leader>ap", "<cmd>CodeCompanionActions<cr>",       mode = "n", desc = "AI: Actions" },
+    { "<leader>ap", ":'<,'>CodeCompanionActions<cr>",      mode = "v", desc = "AI: Actions" },
   },
   config = function()
     require("codecompanion").setup({
@@ -45,10 +50,10 @@ return {
           enabled = function()
             local cwd = vim.fn.getcwd()
             return vim.fn.filereadable(cwd .. "/CLAUDE.md") == 1
-            or vim.fn.filereadable(cwd .. "/AGENT.md") == 1
-            or vim.fn.filereadable(cwd .. "/AGENTS.md") == 1
-            or vim.fn.filereadable(cwd .. "/.cursorrules") == 1
-            or vim.fn.filereadable(cwd .. "/.clinerules") == 1
+              or vim.fn.filereadable(cwd .. "/AGENT.md") == 1
+              or vim.fn.filereadable(cwd .. "/AGENTS.md") == 1
+              or vim.fn.filereadable(cwd .. "/.cursorrules") == 1
+              or vim.fn.filereadable(cwd .. "/.clinerules") == 1
           end,
           files = {
             "CLAUDE.md",
@@ -76,9 +81,9 @@ return {
           opts = {
             paths = {
               -- Global skills (always available)
-              { vim.fn.expand("~/.config/nvim/skills"), recursive = true },
+              { vim.fn.expand("~/.agents/skills"), recursive = true },
               -- Project skills (per project)
-              { vim.fn.getcwd() .. "/.codecompanion/skills", recursive = true },
+              { vim.fn.getcwd() .. "/.agents/skills", recursive = true },
             },
           },
         },
@@ -98,6 +103,76 @@ return {
             },
           },
         },
+        history = {
+          enabled = true,
+          opts = {
+            -- Keymap to open history from chat buffer (default: gh)
+            keymap = "gh",
+            -- Keymap to save the current chat manually (when auto_save is disabled)
+            save_chat_keymap = "sc",
+            -- Save all chats by default (disable to save only manually using 'sc')
+            auto_save = false,
+            -- Number of days after which chats are automatically deleted (0 to disable)
+            expiration_days = 10,
+            -- Picker interface (auto resolved to a valid picker)
+            picker = "fzf-lua", --- ("telescope", "snacks", "fzf-lua", or "default")
+            ---Automatically generate titles for new chats
+            auto_generate_title = true,
+            title_generation_opts = {
+              ---Adapter for generating titles (defaults to current chat adapter)
+              adapter = "copilot", -- "copilot"
+              ---Model for generating titles (defaults to current chat model)
+              model = "gpt-4.1", -- "gpt-4o"
+              ---Number of user prompts after which to refresh the title (0 to disable)
+              max_refreshes = 3,
+              format_title = function(original_title)
+                -- this can be a custom function that applies some custom
+                -- formatting to the title.
+                return original_title
+              end
+            },
+            ---On exiting and entering neovim, loads the last chat on opening chat
+            continue_last_chat = false,
+            ---When chat is cleared with `gx` delete the chat from history
+            delete_on_clearing_chat = false,
+            ---Directory path to save the chats
+            dir_to_save = vim.fn.stdpath("data") .. "/codecompanion-history",
+            ---Enable detailed logging for history extension
+            enable_logging = false,
+
+            -- Summary system
+            summary = {
+              -- Keymap to generate summary for current chat (default: "gcs")
+              create_summary_keymap = "gcs",
+              -- Keymap to browse summaries (default: "gbs")
+              browse_summaries_keymap = "gbs",
+
+              generation_opts = {
+                context_size = 90000, -- max tokens that the model supports
+                include_references = true, -- include slash command content
+                include_tool_outputs = true, -- include tool execution results
+              },
+            },
+
+            -- Memory system (requires VectorCode CLI)
+            memory = {
+              -- Automatically index summaries when they are generated
+              auto_create_memories_on_summary_generation = true,
+              -- Path to the VectorCode executable
+              vectorcode_exe = "vectorcode",
+              -- Tool configuration
+              tool_opts = {
+                -- Default number of memories to retrieve
+                default_num = 10
+              },
+              -- Enable notifications for indexing progress
+              notify = true,
+              -- Index all existing memories on startup
+              -- (requires VectorCode 0.6.12+ for efficient incremental indexing)
+              index_on_startup = false,
+            },
+          }
+        }
       },
 
       -- ── Prompt library ───────────────────────────────

@@ -152,9 +152,9 @@ vim.keymap.set("n", "<leader>cc", "<cmd>cclose<CR>",
     { desc = "Close quickfix list" })
 
 -- Location list — buffer-local list (like quickfix but per-window)
-vim.keymap.set("n", "<leader>ln", "<cmd>lnext<CR>zz",
+vim.keymap.set("n", "<leader>Ln", "<cmd>lnext<CR>zz",
     { desc = "Next location list item" })
-vim.keymap.set("n", "<leader>lp", "<cmd>lprev<CR>zz",
+vim.keymap.set("n", "<leader>Lp", "<cmd>lprev<CR>zz",
     { desc = "Prev location list item" })
 
 -- ── Buffer Navigation ───────────────────────────────────────

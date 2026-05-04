@@ -5,14 +5,14 @@ return {
         "nvim-neotest/nvim-nio", -- required by dap-ui
     },
     keys = {
-        { "<leader>db", function() require("dap").toggle_breakpoint() end, desc = "DAP: Toggle breakpoint" },
-        { "<leader>dc", function() require("dap").continue() end,          desc = "DAP: Continue" },
-        { "<leader>di", function() require("dap").step_into() end,         desc = "DAP: Step into" },
-        { "<leader>do", function() require("dap").step_over() end,         desc = "DAP: Step over" },
-        { "<leader>dO", function() require("dap").step_out() end,          desc = "DAP: Step out" },
-        { "<leader>dr", function() require("dap").repl.open() end,         desc = "DAP: Open REPL" },
-        { "<leader>du", function() require("dapui").toggle() end,          desc = "DAP: Toggle UI" },
-        { "<leader>dt", function() require("dap").terminate() end,         desc = "DAP: Terminate" },
+        { "<leader>Db", function() require("dap").toggle_breakpoint() end, desc = "DAP: Toggle breakpoint" },
+        { "<leader>Dc", function() require("dap").continue() end,          desc = "DAP: Continue" },
+        { "<leader>Di", function() require("dap").step_into() end,         desc = "DAP: Step into" },
+        { "<leader>Do", function() require("dap").step_over() end,         desc = "DAP: Step over" },
+        { "<leader>DO", function() require("dap").step_out() end,          desc = "DAP: Step out" },
+        { "<leader>Dr", function() require("dap").repl.open() end,         desc = "DAP: Open REPL" },
+        { "<leader>Du", function() require("dapui").toggle() end,          desc = "DAP: Toggle UI" },
+        { "<leader>Dt", function() require("dap").terminate() end,         desc = "DAP: Terminate" },
     },
     config = function()
         local dap    = require("dap")

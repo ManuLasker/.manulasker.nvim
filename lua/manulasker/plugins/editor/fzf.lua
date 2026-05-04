@@ -47,8 +47,6 @@ return {
             desc = "Git commits" },
         { "<leader>gb", "<cmd>FzfLua git_bcommits<cr>",
             desc = "Git buffer commits (current file)" },
-        { "<leader>gs", "<cmd>FzfLua git_status<cr>",
-            desc = "Git status" },
 
         -- ── Misc ────────────────────────────────────────────
         { "<leader>pr", "<cmd>FzfLua resume<cr>",
