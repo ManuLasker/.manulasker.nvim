@@ -13,7 +13,7 @@ return {
 
     keys = {
         -- ── Add file to harpoon list ────────────────────────
-        { "<leader>a", function()
+        { "<leader>ha", function()
             require("harpoon"):list():add()
         end, desc = "Harpoon: add file" },
 
@@ -33,9 +33,9 @@ return {
         { "<C-l>", function() require("harpoon"):list():select(4) end,
             desc = "Harpoon: file 4" },
         -- ── Cycle through harpoon list ──────────────────────
-        { "<leader>aP", function() require("harpoon"):list():prev() end,
+        { "<leader>hP", function() require("harpoon"):list():prev() end,
             desc = "Harpoon: prev file" },
-        { "<leader>aN", function() require("harpoon"):list():next() end,
+        { "<leader>hN", function() require("harpoon"):list():next() end,
             desc = "Harpoon: next file" },
     },
 
@@ -44,7 +44,7 @@ return {
 
         harpoon:setup({
             settings = {
-                save_on_toggle = false,
+                save_on_toggle = true,
                 sync_on_ui_close = true,
                 key = function()
                     -- One harpoon list per project (cwd-based)
@@ -53,13 +53,5 @@ return {
             },
         })
 
-        -- Override the UI border
-        vim.api.nvim_create_autocmd("FileType", {
-            pattern = "harpoon",
-            callback = function()
-                vim.api.nvim_set_option_value("winhl",
-                    "FloatBorder:CatppuccinBlue", { win = 0 })
-            end,
-        })
     end,
 }

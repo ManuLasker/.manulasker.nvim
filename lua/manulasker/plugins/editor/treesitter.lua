@@ -1,111 +1,91 @@
 -- ============================================================
 -- Treesitter: Modern syntax highlighting & code analysis
 -- ============================================================
--- Parses code into an AST (Abstract Syntax Tree) for:
---   - Better syntax highlighting (semantic, not regex-based)
---   - Smart indentation
---   - Code folding
---   - Text objects (select/operate on functions, classes, etc.)
---   - Incremental selection
--- Repo: github.com/nvim-treesitter/nvim-treesitter
+-- Neovim 0.12+ migration — uses the new `main` branch API.
+--
+-- The old `master` branch and `nvim-treesitter.configs` module
+-- are obsolete and not compatible with Neovim 0.12.
+--
+-- Key changes from old setup:
+--   - Branch changed from `master` to `main`
+--   - `nvim-treesitter.configs` no longer exists
+--   - Highlighting/indent enabled via FileType autocmd
+--   - `ensure_installed` replaced with manual install API
+--   - tree-sitter CLI required for compiling parsers
+--
+-- Install tree-sitter CLI first:
+--   cargo install tree-sitter-cli
+--   or: npm install -g tree-sitter-cli
+--
+-- After changing branch, run in order:
+--   :Lazy update nvim-treesitter  (then press x in UI to remove old)
+--   :TSUninstall all
+--   restart Neovim
+--   :TSUpdate
+--   :checkhealth nvim-treesitter
+--
+-- Repo: github.com/nvim-treesitter/nvim-treesitter (main branch)
+-- ============================================================
 
 return {
   "nvim-treesitter/nvim-treesitter",
-  branch = "master",                    -- main branch (more stable than nightly)
-  build = ":TSUpdate",                  -- run :TSUpdate after install
-  event = { "BufReadPost", "BufNewFile" },   -- load when opening any file
-
+  branch = "main",   -- nueva rama para 0.12
+  build  = ":TSUpdate",
+  event  = { "BufReadPost", "BufNewFile" },
   dependencies = {
-    -- Additional text objects (vif = visual inside function, etc.)
-    "nvim-treesitter/nvim-treesitter-textobjects",
+    { "nvim-treesitter/nvim-treesitter-textobjects", branch = "main" },
   },
+  init = function()
+    -- ── Instalar parsers necesarios ──────────────────
+    local ensure_installed = {
+      -- Web
+      "javascript", "typescript", "tsx",
+      "html", "css", "scss",
+      "json", "jsonc", "yaml", "toml",
 
-  config = function()
-    require("nvim-treesitter.configs").setup({
-      -- ── Languages to install/keep installed ─────────
-      -- "all" installs every parser (slow, big disk usage)
-      -- We pick the languages you actually use
-      modules = {},
-      ignore_install = {},
-      ensure_installed = {
-        -- Web
-        "javascript", "typescript", "tsx",
-        "html", "css", "scss",
-        "json", "jsonc", "yaml", "toml",
+      -- Backend
+      "python", "java", "go", "rust",
+      "c", "cpp",
 
-        -- Backend
-        "python", "java", "go", "rust",
-        "c", "cpp",
+      -- Scripting / Config
+      "lua", "vim", "vimdoc",
+      "bash", "fish",
+      "regex", "query",
 
-        -- Scripting / Config
-        "lua", "vim", "vimdoc",
-        "bash", "fish",
-        "regex", "query",
+      -- Docs
+      "markdown", "markdown_inline",
 
-        -- Docs
-        "markdown", "markdown_inline",
+      -- DevOps
+      "dockerfile",
+      "gitignore", "gitcommit", "git_rebase",
+      "diff",
 
-        -- DevOps
-        "dockerfile",
-        "gitignore", "gitcommit", "git_rebase",
-        "diff",
+      -- Misc
+      "comment",          -- highlights TODO, FIXME, NOTE in comments
+      "sql",
+    }
+    local already = require("nvim-treesitter.config").get_installed()
+    local to_install = vim.iter(ensure_installed)
+    :filter(function(p) return not vim.tbl_contains(already, p) end)
+    :totable()
+    if #to_install > 0 then
+      require("nvim-treesitter").install(to_install)
+    end
 
-        -- Misc
-        "comment",          -- highlights TODO, FIXME, NOTE in comments
-        "sql",
-      },
-
-      -- ── Auto-install missing parsers when entering buffer ──
-      auto_install = true,
-
-      -- ── Sync vs async install ───────────────────────
-      sync_install = false,   -- install async (faster startup)
-
-      -- ── Highlighting ────────────────────────────────
-      highlight = {
-        enable = true,
-        -- Disable for huge files (treesitter can be slow)
-        disable = function(lang, buf)
-          local max_filesize = 100 * 1024  -- 100KB
-          local ok, stats = pcall(vim.loop.fs_stat,
-            vim.api.nvim_buf_get_name(buf))
-          if ok and stats and stats.size > max_filesize then
-            return true
-          end
-          -- disable for codecompanion buffers
-          local  ft = vim.bo[buf].filetype
-          if ft == "codecompanion" then
-            return true
-          end
-        end,
-        additional_vim_regex_highlighting = false,
-      },
-
-      -- ── Smart indentation ───────────────────────────
-      -- Replaces vim's regex-based indent with AST-aware indent
-      indent = {
-        enable = true,
-        -- Some languages have buggy indent, disable per-language if needed
-        disable = { "yaml", "lua" },   -- yaml indent is fragile
-      },
-
-      -- ── Incremental selection ───────────────────────
-      -- Press keymap to expand selection to next AST node
-      incremental_selection = {
-        enable = true,
-        keymaps = {
-          init_selection = "<C-space>",     -- start selection
-          node_incremental = "<C-space>",   -- expand to next node
-          scope_incremental = "<C-s>",      -- expand to scope
-          node_decremental = "<bs>",        -- shrink (backspace)
-        },
-      },
+    -- ── Highlight + indent via FileType autocmd ───────
+    vim.api.nvim_create_autocmd("FileType", {
+      callback = function(args)
+        local ft = vim.bo[args.buf].filetype
+        -- skip problematic filetypes
+        if ft == "" or ft == "codecompanion" then return end
+        pcall(vim.treesitter.start, args.buf)
+        vim.bo[args.buf].indentexpr = "v:lua.require'nvim-treesitter'.indentexpr()"
+      end,
     })
 
-    -- ── Folding setup (optional but useful) ─────────────
-    -- Use treesitter for code folding (smarter than indent-based)
+    -- ── Folding ───────────────────────────────────────
     vim.opt.foldmethod = "expr"
-    vim.opt.foldexpr = "nvim_treesitter#foldexpr()"
-    vim.opt.foldenable = false   -- don't fold by default (toggle with zc)
+    vim.opt.foldexpr   = "v:lua.vim.treesitter.foldexpr()"
+    vim.opt.foldenable = false
   end,
 }
