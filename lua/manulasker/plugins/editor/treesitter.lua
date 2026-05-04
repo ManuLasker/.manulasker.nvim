@@ -63,6 +63,7 @@ return {
       -- Misc
       "comment",          -- highlights TODO, FIXME, NOTE in comments
       "sql",
+      "tmux"
     }
     local already = require("nvim-treesitter.config").get_installed()
     local to_install = vim.iter(ensure_installed)
@@ -75,9 +76,6 @@ return {
     -- ── Highlight + indent via FileType autocmd ───────
     vim.api.nvim_create_autocmd("FileType", {
       callback = function(args)
-        local ft = vim.bo[args.buf].filetype
-        -- skip problematic filetypes
-        if ft == "" or ft == "codecompanion" then return end
         pcall(vim.treesitter.start, args.buf)
         vim.bo[args.buf].indentexpr = "v:lua.require'nvim-treesitter'.indentexpr()"
       end,
