@@ -3,7 +3,7 @@
 -- ============================================================
 
 -- ── UI / Display ────────────────────────────────────────────
-vim.opt.guicursor = ""              -- Use block cursor in all modes (no thin beam in insert)
+vim.opt.guicursor = "a:block-blinkwait175-blinkoff150-blinkon175"  -- Blinking block in all modes
 vim.opt.number = true               -- Show line number on current line
 vim.opt.relativenumber = true       -- Other lines show distance from current (great for motions like 5j, 12k)
 vim.opt.cursorline = true           -- Highlight the entire current line
